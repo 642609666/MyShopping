@@ -1,21 +1,26 @@
 package com.atguigu.myshopping.home;
 
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
 import com.atguigu.myshopping.R;
 import com.atguigu.myshopping.base.BaseFragment;
+import com.atguigu.myshopping.home.bean.HomeBean;
+import com.atguigu.myshopping.utils.Constants;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
+
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import okhttp3.Call;
 
 
 /**
@@ -39,6 +44,7 @@ public class HomeFragment extends BaseFragment {
     @InjectView(R.id.top)
     ImageButton top;
 
+    private List<HomeBean> mHomeBeen;
     public HomeFragment() {
         super();
     }
@@ -55,21 +61,39 @@ public class HomeFragment extends BaseFragment {
     public void initData() {
         super.initData();
         Log.e("TAG", "主页数据初始化");
+
+        //获得网络数据
+        getDataFromNet();
     }
 
 
+    public void getDataFromNet() {
+        OkHttpUtils
+                .get()
+                .url(Constants.HOME_URL)
+                .id(100)
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        Log.e("TAG", "请求失败" + e.getMessage());
+                    }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
+                    @Override
+                    public void onResponse(String response, int id) {
+                        Log.e("TAG", "请求成功");
+
+                        //对数据进行json解析
+                        processData(response);
+                    }
+
+                });
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // TODO: inflate a fragment view
-        View rootView = super.onCreateView(inflater, container, savedInstanceState);
-        ButterKnife.inject(this, rootView);
-        return rootView;
+    private void processData(String json) {
+        HomeBean homeBean = JSON.parseObject(json, HomeBean.class);
+        HomeBean.ResultBean result = homeBean.getResult();
+        Log.e("TAG", "result==" + result.getAct_info().get(0).getName());
     }
 
     @Override
@@ -95,4 +119,5 @@ public class HomeFragment extends BaseFragment {
                 break;
         }
     }
+
 }
