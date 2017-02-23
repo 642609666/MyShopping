@@ -27,7 +27,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.1.1'
     testCompile 'junit:junit:4.12'
     //初始化控件
-    compile 'com.jakewharton:butterknife:8.4.0'
+    compile 'com.jakewharton:butterknife:5.1.0'
 //第三方广告条效果
     compile 'com.youth.banner:banner:1.4.9'  //最新版本
 //第三方网络请求

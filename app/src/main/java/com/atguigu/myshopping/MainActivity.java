@@ -16,11 +16,11 @@ import com.atguigu.myshopping.user.UserFragment;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.InjectView;
 
 public class MainActivity extends AppCompatActivity {
-    @BindView(R.id.fl_main)
+    @InjectView(R.id.fl_main)
     RelativeLayout flMain;
     private RadioGroup rgMain;
     private List<BaseFragment> mBaseFragments;
@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
+        ButterKnife.inject(this);
         rgMain = (RadioGroup) findViewById(R.id.rg_main);
 
         //初始化fragment
